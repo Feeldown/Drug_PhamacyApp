@@ -8,22 +8,21 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     position: relative;
     padding-bottom: 100px;
-    padding-left: 12px;
-    padding-right: 12px;
 }
 
 .page-header {
-    padding: 18px 0 8px 0;
+    padding: 40px 24px;
     background: white;
     text-align: center;
     border-bottom: 1px solid #e9ecef;
+    position: relative;
 }
 
 .header-title {
-    font-size: 24px;
+    font-size: 36px;
     font-weight: 700;
     color: #4263eb;
-    margin-bottom: 0;
+    margin-bottom: 8px;
     letter-spacing: -0.5px;
 }
 
@@ -34,12 +33,13 @@
 }
 
 .search-section {
-    padding: 12px 0 8px 0;
-    background: white;
+    padding: 40px 24px;
+    background: linear-gradient(to bottom, white, #f8f9fa);
 }
 
 .search-bar {
-    margin-bottom: 8px;
+    position: relative;
+    margin-bottom: 24px;
 }
 
 .search-icon {
@@ -47,32 +47,24 @@
     left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 22px;
+    font-size: 20px;
     color: #4263eb;
-    pointer-events: none;
-    z-index: 2;
 }
 
 .search-input {
     width: 100%;
-    padding: 14px 16px 14px 48px;
+    padding: 16px 16px 16px 48px;
     border: 1px solid #e9ecef;
     border-radius: 20px;
     font-size: 16px;
     transition: all 0.2s ease;
     background: white;
-    z-index: 1;
 }
 
 .search-input:focus {
     outline: none;
     border-color: #4263eb;
     box-shadow: 0 2px 8px rgba(66,99,235,0.1);
-}
-
-.search-input::placeholder {
-    color: #adb5bd;
-    opacity: 1;
 }
 
 .search-methods {
@@ -84,9 +76,9 @@
 
 .search-method-card {
     background: white;
-    border: 1.5px solid #e9ecef;
+    border: 1px solid #e9ecef;
     border-radius: 20px;
-    padding: 20px;
+    padding: 24px;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
@@ -97,9 +89,8 @@
 }
 
 .search-method-card:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 16px rgba(66,99,235,0.10);
-    border-color: #4263eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .method-icon {
@@ -118,15 +109,14 @@
 
 .method-info h3 {
     font-size: 17px;
-    font-weight: 700;
+    font-weight: 600;
     color: #212529;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .method-info p {
-    font-size: 13px;
-    color: #868e96;
-    margin-bottom: 0;
+    font-size: 14px;
+    color: #495057;
 }
 
 .filters-section {
@@ -367,38 +357,34 @@
 /* Responsive Design */
 @media (max-width: 480px) {
     .search-page {
-        width: 100%;
-        max-width: 100%;
-        min-width: unset;
+        width: 100vw;
+        max-width: 100vw;
         margin: 0;
-        padding-left: 8px;
-        padding-right: 8px;
+        padding: 8px;
+        min-height: 100vh;
         box-sizing: border-box;
-        border-radius: 0;
-        box-shadow: none;
+        background: #fff;
     }
     .page-header {
-        padding: 10px 0 4px 0;
+        padding: 20px 8px 12px 8px;
+        text-align: left;
     }
     .header-title {
-        font-size: 18px;
+        font-size: 22px;
     }
     .header-subtitle {
-        font-size: 12px;
+        font-size: 13px;
     }
     .search-section {
-        padding: 8px 0 4px 0;
+        padding: 0 0 16px 0;
     }
     .search-bar {
-        margin-bottom: 16px;
-    }
-    .search-icon {
-        left: 10px;
-        font-size: 20px;
+        padding: 8px 0;
+        gap: 6px;
     }
     .search-input {
-        padding: 12px 10px 12px 40px;
         font-size: 15px;
+        padding: 8px 6px;
     }
     .search-types {
         flex-direction: column;
@@ -407,36 +393,38 @@
     }
     .search-type-btn {
         font-size: 14px;
-        padding: 8px 10px;
+        padding: 8px 0;
+        width: 100%;
+        border-radius: 12px;
     }
     .search-methods {
         grid-template-columns: 1fr;
         gap: 10px;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
     }
     .search-method-card {
-        padding: 10px;
+        padding: 12px 8px;
         font-size: 14px;
         border-radius: 14px;
     }
     .filters-section {
-        padding: 0 0 12px 0;
+        padding: 0 0 16px 0;
     }
     .section-title {
-        font-size: 14px;
-        margin-bottom: 8px;
+        font-size: 16px;
+        margin-bottom: 10px;
     }
     .filters {
         gap: 6px;
         padding-bottom: 4px;
     }
     .filter-btn {
-        font-size: 12px;
+        font-size: 13px;
         padding: 6px 10px;
-        border-radius: 10px;
+        border-radius: 12px;
     }
     .results-section {
-        padding: 0 0 16px 0;
+        padding: 0 0 24px 0;
     }
     .results-header {
         flex-direction: column;
@@ -500,121 +488,29 @@
 
 .search-types {
     display: flex;
+    gap: 10px;
+    margin: 15px 0;
     justify-content: center;
-    gap: 6px;
-    margin-bottom: 8px;
 }
 
 .search-type-btn {
-    padding: 6px 14px;
-    font-size: 13px;
-    border-radius: 14px;
-    border: none;
-    background: #f1f3fa;
-    color: #495057;
-    font-weight: 600;
-    transition: all 0.2s;
+    padding: 8px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background: white;
+    color: #666;
+    font-size: 14px;
     cursor: pointer;
-    box-shadow: 0 1px 4px rgba(66,99,235,0.04);
-}
-
-.search-type-btn.active {
-    background: #4263eb;
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(66,99,235,0.10);
-    border: 1.5px solid #4263eb;
+    transition: all 0.3s ease;
 }
 
 .search-type-btn:hover {
-    background: #e9ecef;
-    color: #4263eb;
+    background: #f5f5f5;
+    border-color: #ccc;
 }
 
-/* --- Chip หมวดหมู่ --- */
-.filters.filters-chips {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    margin-bottom: 8px;
-    scrollbar-width: none;
-}
-.filters.filters-chips::-webkit-scrollbar {
-    display: none;
-}
-.filter-btn.chip {
-    padding: 6px 14px;
-    border-radius: 16px;
-    font-size: 13px;
-    background: #f8f9fa;
-    color: #495057;
-    border: none;
-    font-weight: 500;
-    transition: all 0.2s;
-    white-space: nowrap;
-}
-.filter-btn.chip.active {
-    background: #4263eb;
-    color: #fff;
-}
-
-/* --- Compact Results --- */
-.results-section.compact {
-    padding: 0;
-}
-.results-header {
-    margin-bottom: 8px;
-}
-.drugs-grid.compact {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-.drug-card.compact {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #fff;
-    border: 1px solid #e9ecef;
-    border-radius: 12px;
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: box-shadow 0.15s;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-}
-.drug-card.compact:hover {
-    box-shadow: 0 2px 8px rgba(66,99,235,0.08);
-}
-.drug-card-image.compact {
-    font-size: 20px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #edf2ff;
-    border-radius: 8px;
-}
-.drug-card-title.compact {
-    font-size: 15px;
-    font-weight: 600;
-    color: #212529;
-    margin: 0;
-}
-
-/* --- Responsive --- */
-@media (max-width: 480px) {
-    .drug-card.compact {
-        padding: 6px 8px;
-        border-radius: 8px;
-    }
-    .drug-card-image.compact {
-        font-size: 16px;
-        width: 24px;
-        height: 24px;
-        border-radius: 6px;
-    }
-    .drug-card-title.compact {
-        font-size: 13px;
-    }
+.search-type-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
 } 

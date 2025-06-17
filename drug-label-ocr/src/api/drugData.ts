@@ -94,24 +94,28 @@ export const getUniqueDrugForms = (): DrugForm[] => {
 };
 
 // Enhanced search function that includes drug uses and side effects
-export const searchDrugsEnhanced = (query: string, searchType: 'all' | 'generic' | 'brand' = 'all'): DrugData[] => {
+export const searchDrugsEnhanced = (
+  query: string,
+  searchType: 'all' | 'generic' | 'brand' = 'all',
+  drugList?: DrugData[]
+): DrugData[] => {
   const normalizedQuery = query.toLowerCase();
-  
+  const list = drugList || drugData;
   switch (searchType) {
     case 'generic':
-      return drugData.filter(drug => 
+      return list.filter(drug => 
         drug.ชื่อสามัญ.toLowerCase().includes(normalizedQuery) ||
         drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(normalizedQuery) ||
         drug['อาการไม่พึงประสงค์ทั่วไป'].toLowerCase().includes(normalizedQuery)
       );
     case 'brand':
-      return drugData.filter(drug => 
+      return list.filter(drug => 
         drug.ชื่อการค้า.toLowerCase().includes(normalizedQuery) ||
         drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(normalizedQuery) ||
         drug['อาการไม่พึงประสงค์ทั่วไป'].toLowerCase().includes(normalizedQuery)
       );
     default:
-      return drugData.filter(drug =>
+      return list.filter(drug =>
         drug.ชื่อสามัญ.toLowerCase().includes(normalizedQuery) ||
         drug.ชื่อการค้า.toLowerCase().includes(normalizedQuery) ||
         drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(normalizedQuery) ||
@@ -148,6 +152,6 @@ export const getDrugsByFormAsync = async (form: string): Promise<DrugData[]> => 
   const normalizedForm = form.toLowerCase();
   await new Promise((resolve) => setTimeout(resolve, 500)); // simulate API delay
   return drugData.filter(
-    (drug) => drug.รูปแบบยา.toLowerCase().includes(normalizedForm)
+    (drug) => drug.รูปแบบยา.toLowerCase() === normalizedForm
   );
 }; 
