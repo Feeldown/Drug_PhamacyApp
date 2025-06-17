@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ถ่ายรูป/อัปโหลด - MedSearch</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4263eb;
+            --primary-light: #edf2ff;
+            --success: #40c057;
+            --success-light: #ebfbee;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #868e96;
+            --bg-light: #f8f9fa;
+            --border-color: #e9ecef;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+            --transition: all 0.2s ease;
+            --radius-lg: 20px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+
+        /* Global Link Styles */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom, 20px));
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Header */
+        .header {
+            padding: 24px;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            border: none;
+            background: none;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-light);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Tabs */
+        .tabs {
+            padding: 16px 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-btn:not(.active):hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-icon {
+            font-size: 20px;
+        }
+
+        /* Camera View */
+        .camera-view {
+            position: relative;
+            aspect-ratio: 3/4;
+            background: #000;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            margin: 0 24px 24px;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+            color: white;
+        }
+
+        .camera-tip {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .camera-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: var(--transition);
+        }
+
+        .camera-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .camera-btn.capture {
+            width: 72px;
+            height: 72px;
+            background: var(--success);
+            color: white;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            margin: 0 24px 24px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .upload-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .upload-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Results */
+        .results {
+            padding: 24px;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results-header {
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .result-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .result-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .result-header {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .result-image {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+        }
+
+        .result-info {
+            flex: 1;
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .result-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .result-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .result-tag {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .result-match {
+            font-size: 14px;
+            color: var(--success);
+            background: var(--success-light);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid var(--border-color);
+            padding: 12px 0;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+        }
+
+        .nav-items {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px;
+            min-width: 64px;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            position: relative;
+            text-align: center;
+            flex: 1;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-item.active::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 360px) {
+            .header,
+            .tabs,
+            .camera-view,
+            .upload-area,
+            .results {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .camera-btn {
+                width: 56px;
+                height: 56px;
+            }
+
+            .camera-btn.capture {
+                width: 64px;
+                height: 64px;
+            }
+        }
+
+        @supports (padding: max(0px)) {
+            .container {
+                padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom, 20px)));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="search.html" class="back-btn">←</a>
+            <h1 class="header-title">ถ่ายรูป/อัปโหลดยา</h1>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active">
+                <span class="tab-icon">📷</span>
+                ถ่ายรูป
+            </button>
+            <button class="tab-btn">
+                <span class="tab-icon">📁</span>
+                อัปโหลด
+            </button>
+        </div>
+
+        <!-- Camera View -->
+        <div class="camera-view">
+            <div class="camera-overlay">
+                <div class="camera-tip">วางยาให้เห็นฉลากชัดเจน</div>
+                <div class="camera-controls">
+                    <button class="camera-btn">🔄</button>
+                    <button class="camera-btn capture">📸</button>
+                    <button class="camera-btn">💡</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Area (Hidden by default) -->
+        <div class="upload-area" style="display: none;">
+            <div class="upload-icon">📁</div>
+            <h2 class="upload-title">อัปโหลดรูปยา</h2>
+            <p class="upload-subtitle">ลากไฟล์มาวางที่นี่ หรือ</p>
+            <button class="upload-btn">
+                <span>เลือกไฟล์</span>
+                <span>📎</span>
+            </button>
+        </div>
+
+        <!-- Results (Hidden by default) -->
+        <div class="results">
+            <div class="results-header">
+                <h2 class="results-title">ผลการค้นหา</h2>
+                <span class="results-count">พบ 2 รายการ</span>
+            </div>
+
+            <a href="drug_details.html" class="result-card">
+                <div class="result-header">
+                    <img src="https://via.placeholder.com/64" alt="ยา" class="result-image">
+                    <div class="result-info">
+                        <h3 class="result-title">CALCIUM [GLUCONATE]</h3>
+                        <p class="result-subtitle">10% CALCIUM GLUCONATE (กาชาด)</p>
+                        <div class="result-tags">
+                            <span class="result-tag">ยาฉีด</span>
+                            <span class="result-tag">แคลเซียม</span>
+                        </div>
+                        <div class="result-match">
+                            <span>✓</span>
+                            <span>ตรงกัน 95%</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="drug_details.html" class="result-card">
+                <div class="result-header">
+                    <img src="https://via.placeholder.com/64" alt="ยา" class="result-image">
+                    <div class="result-info">
+                        <h3 class="result-title">CALCIUM [CARBONATE]</h3>
+                        <p class="result-subtitle">แคลเซียมคาร์บอเนต</p>
+                        <div class="result-tags">
+                            <span class="result-tag">ยาเม็ด</span>
+                            <span class="result-tag">แคลเซียม</span>
+                        </div>
+                        <div class="result-match">
+                            <span>✓</span>
+                            <span>ตรงกัน 85%</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-items">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">หน้าหลัก</span>
+                </a>
+                <a href="search.html" class="nav-item active">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-label">ค้นหา</span>
+                </a>
+                <a href="categories.html" class="nav-item">
+                    <span class="nav-icon">📁</span>
+                    <span class="nav-label">หมวดหมู่</span>
+                </a>
+                <a href="help.html" class="nav-item">
+                    <span class="nav-icon">❔</span>
+                    <span class="nav-label">ช่วยเหลือ</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.back-btn').addEventListener('click', () => {
+            window.history.back();
+        });
+
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab-btn');
+        const cameraView = document.querySelector('.camera-view');
+        const uploadArea = document.querySelector('.upload-area');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                // Show/hide corresponding view
+                if (tab.textContent.includes('ถ่ายรูป')) {
+                    cameraView.style.display = 'block';
+                    uploadArea.style.display = 'none';
+                } else {
+                    cameraView.style.display = 'none';
+                    uploadArea.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

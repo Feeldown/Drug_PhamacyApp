@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedSearch - ค้นหาข้อมูลยา</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4263eb;
+            --primary-light: #edf2ff;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #868e96;
+            --bg-light: #f8f9fa;
+            --border-color: #e9ecef;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+            --transition: all 0.2s ease;
+            --radius-lg: 20px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+
+        /* Global Link Styles */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom, 20px));
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Header */
+        .header {
+            padding: 40px 24px;
+            background: white;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .app-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 40px 24px;
+            background: linear-gradient(to bottom, white, var(--bg-light));
+        }
+
+        .search-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .search-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Search Methods */
+        .search-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .search-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            background: var(--primary-light);
+        }
+
+        .search-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            background: var(--primary-light);
+            color: var(--primary);
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .search-btn:hover .search-icon {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .search-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .search-text h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .search-text p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Categories */
+        .categories {
+            padding: 0 24px 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            padding: 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: "";
+            width: 4px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .category-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            background: var(--primary-light);
+        }
+
+        .category-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.15);
+        }
+
+        .category-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .category-count {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid var(--border-color);
+            padding: 12px 0;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+        }
+
+        .nav-items {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px;
+            min-width: 64px;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            position: relative;
+            text-align: center;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-item.active::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 360px) {
+            .nav-items {
+                padding: 0 8px;
+                gap: 4px;
+            }
+
+            .nav-item {
+                padding: 6px 4px;
+                min-width: 56px;
+            }
+
+            .nav-icon {
+                font-size: 18px;
+            }
+
+            .nav-label {
+                font-size: 10px;
+            }
+        }
+
+        /* Add support for devices with bottom safe area (like iPhone X and newer) */
+        @supports (padding: max(0px)) {
+            .bottom-nav {
+                padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+            }
+
+            .container {
+                padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom, 20px)));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .search-section,
+            .categories {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .category-grid {
+                gap: 12px;
+            }
+
+            .search-btn {
+                padding: 20px;
+            }
+
+            .search-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+        }
+
+        @media (min-width: 601px) {
+            .container {
+                margin: 20px auto;
+                min-height: calc(100vh - 40px);
+                border-radius: var(--radius-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="app-title">MedSearch</h1>
+            <p class="app-subtitle">ค้นหาข้อมูลยาได้ง่ายๆ</p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <h2 class="search-title">ค้นหายาของคุณ</h2>
+            <p class="search-subtitle">เลือกวิธีค้นหาที่สะดวกสำหรับคุณ</p>
+
+            <div class="search-methods">
+                <a href="search.html" class="search-btn">
+                    <span class="search-icon">🔍</span>
+                    <div class="search-text">
+                        <h3>ค้นหาด้วยข้อความ</h3>
+                        <p>พิมพ์ชื่อยาหรือสรรพคุณที่ต้องการ</p>
+                    </div>
+                </button>
+
+                <a href="visual_search.html" class="search-btn">
+                    <span class="search-icon">📷</span>
+                    <div class="search-text">
+                        <h3>ถ่ายรูปยา</h3>
+                        <p>ถ่ายภาพยาเพื่อค้นหาข้อมูล</p>
+                    </div>
+                </a>
+
+                <a href="visual_search.html" class="search-btn">
+                    <span class="search-icon">📁</span>
+                    <div class="search-text">
+                        <h3>อัปโหลดรูปภาพ</h3>
+                        <p>เลือกรูปภาพยาจากอุปกรณ์ของคุณ</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="categories">
+            <h2 class="section-title">หมวดหมู่ยอดนิยม</h2>
+            <div class="category-grid">
+                <button class="category-card">
+                    <span class="category-icon">💊</span>
+                    <h3 class="category-name">ยาเม็ด</h3>
+                    <span class="category-count">450 รายการ</span>
+                </button>
+
+                <button class="category-card">
+                    <span class="category-icon">💊</span>
+                    <h3 class="category-name">ยาแคปซูล</h3>
+                    <span class="category-count">280 รายการ</span>
+                </button>
+
+                <button class="category-card">
+                    <span class="category-icon">🧪</span>
+                    <h3 class="category-name">ยาน้ำ</h3>
+                    <span class="category-count">180 รายการ</span>
+                </button>
+
+                <button class="category-card">
+                    <span class="category-icon">🧴</span>
+                    <h3 class="category-name">ยาครีม</h3>
+                    <span class="category-count">120 รายการ</span>
+                </button>
+
+                <button class="category-card">
+                    <span class="category-icon">🧴</span>
+                    <h3 class="category-name">ยาขี้ผึ้ง</h3>
+                    <span class="category-count">95 รายการ</span>
+                </button>
+
+                <button class="category-card">
+                    <span class="category-icon">💉</span>
+                    <h3 class="category-name">ยาฉีด</h3>
+                    <span class="category-count">75 รายการ</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-items">
+                <a href="web_app.html" class="nav-item active">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">หน้าหลัก</span>
+                </a>
+                <a href="search.html" class="nav-item">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-label">ค้นหา</span>
+                </a>
+                <a href="categories.html" class="nav-item">
+                    <span class="nav-icon">📁</span>
+                    <span class="nav-label">หมวดหมู่</span>
+                </a>
+                <a href="help.html" class="nav-item">
+                    <span class="nav-icon">❔</span>
+                    <span class="nav-label">ช่วยเหลือ</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>
