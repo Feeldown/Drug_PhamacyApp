@@ -1,0 +1,106 @@
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid var(--border-color);
+    padding: 12px 0;
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1000;
+}
+
+.app-container .bottom-nav {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 600px;
+    width: 100%;
+}
+
+.nav-items {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+    min-width: 64px;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    position: relative;
+    text-align: center;
+    flex: 1 1 0;
+    flex-basis: 0;
+}
+
+.nav-item.active {
+    color: #4263eb;
+    background: #edf2ff;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(66,99,235,0.08);
+}
+
+.nav-item:hover {
+    background: #f1f3fa;
+    color: #4263eb;
+}
+
+.nav-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.nav-icon {
+    font-size: 22px;
+    margin-bottom: 2px;
+    line-height: 1;
+}
+
+.nav-label {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    line-height: 1.2;
+    letter-spacing: 0.2px;
+}
+
+@media (max-width: 480px) {
+    .nav-item {
+        min-width: 48px;
+        padding: 6px 2px;
+    }
+    .nav-icon {
+        font-size: 18px;
+    }
+    .nav-label {
+        font-size: 10px;
+    }
+}
+
+@supports (padding: max(0px)) {
+    .bottom-nav {
+        padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    }
+} 
