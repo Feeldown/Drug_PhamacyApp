@@ -1,0 +1,317 @@
+.drug-details-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+    min-height: 100vh;
+    background: white;
+}
+
+.drug-details-page .header {
+    padding: 20px 16px;
+    background: white;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.drug-details-page .back-btn {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.drug-details-page .back-btn:hover {
+    background: #f0f7ff;
+    color: #007bff;
+}
+
+.drug-details-page .drug-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    max-width: calc(100% - 80px);
+    text-align: center;
+}
+
+.drug-details-page .drug-subtitle {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+    line-height: 1.4;
+    max-width: calc(100% - 80px);
+    text-align: center;
+}
+
+.drug-details-page .drug-image-section {
+    padding: 24px 16px;
+    text-align: center;
+    background: linear-gradient(to bottom, white, #f8f9fa);
+}
+
+.drug-details-page .drug-image-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #666;
+}
+
+.drug-details-page .drug-info {
+    padding: 0 16px 24px;
+}
+
+.drug-details-page .info-section {
+    margin-bottom: 24px;
+}
+
+.drug-details-page .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.drug-details-page .section-title::before {
+    content: "";
+    width: 3px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 2px;
+}
+
+.drug-details-page .info-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.drug-details-page .info-card.warning {
+    border-left: 3px solid #ff6b6b;
+    background: #fff5f5;
+}
+
+.drug-details-page .info-card.success {
+    border-left: 3px solid #51cf66;
+    background: #f4fce3;
+}
+
+.drug-details-page .info-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.drug-details-page .info-icon {
+    font-size: 18px;
+}
+
+.drug-details-page .warning .info-icon {
+    color: #ff6b6b;
+}
+
+.drug-details-page .success .info-icon {
+    color: #51cf66;
+}
+
+.drug-details-page .info-content {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    padding-left: 26px;
+}
+
+.drug-details-page .info-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 26px;
+}
+
+.drug-details-page .info-list li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 8px;
+    color: #666;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.drug-details-page .info-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.drug-details-page .warning .info-list li::before {
+    color: #ff6b6b;
+}
+
+/* Drug Card Styles */
+.drug-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.drug-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.drug-card-image {
+    width: 40px;
+    height: 40px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.drug-card-info {
+    flex: 1;
+}
+
+.drug-card-info h4 {
+    margin: 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.drug-card-info p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.drug-card-form {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #666;
+}
+
+/* Similar Drugs Section */
+.similar-drugs-section,
+.recently-viewed-section {
+    margin-top: 24px;
+    padding: 0 16px;
+}
+
+.similar-drugs-grid,
+.recently-viewed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #666;
+}
+
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .drug-details-page {
+        padding: 8px;
+        min-width: 100vw;
+        max-width: 100vw;
+        box-sizing: border-box;
+    }
+    .drug-details-page .header {
+        padding: 12px 8px;
+    }
+    .drug-details-page .drug-title {
+        font-size: 16px;
+    }
+    .drug-details-page .drug-subtitle {
+        font-size: 11px;
+    }
+    .drug-details-page .drug-image-placeholder {
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
+    }
+    .drug-details-page .section-title {
+        font-size: 13px;
+    }
+    .drug-details-page .info-card {
+        padding: 8px;
+    }
+    .drug-details-page .info-title {
+        font-size: 13px;
+    }
+    .drug-details-page .info-content,
+    .drug-details-page .info-list li {
+        font-size: 11px;
+    }
+    .similar-drugs-grid,
+    .recently-viewed-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+        box-sizing: border-box;
+        gap: 10px;
+    }
+} 
