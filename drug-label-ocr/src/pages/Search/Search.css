@@ -436,7 +436,6 @@
         font-size: 13px;
     }
     .drugs-grid {
-        grid-template-columns: 1fr;
         width: 100%;
         box-sizing: border-box;
         padding: 0;

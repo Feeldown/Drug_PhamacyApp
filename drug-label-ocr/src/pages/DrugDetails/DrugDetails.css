@@ -309,7 +309,6 @@
     }
     .similar-drugs-grid,
     .recently-viewed-grid {
-        grid-template-columns: 1fr;
         width: 100%;
         box-sizing: border-box;
         gap: 10px;

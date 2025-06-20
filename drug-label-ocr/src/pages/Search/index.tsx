@@ -87,7 +87,7 @@ const SearchPage = () => {
 
             <div className="search-section">
                 <div className="search-bar">
-                    <span className="search-icon"></span>
+                    <span className="search-icon">🔍</span>
                     <input
                         type="text"
                         className="search-input"
