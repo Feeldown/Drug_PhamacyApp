@@ -437,8 +437,10 @@
     }
     .drugs-grid {
         grid-template-columns: 1fr;
-        gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
         padding: 0;
+        gap: 10px;
     }
     .drug-card {
         padding: 12px 8px;

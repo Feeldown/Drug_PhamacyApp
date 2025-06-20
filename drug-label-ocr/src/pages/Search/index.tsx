@@ -87,7 +87,7 @@ const SearchPage = () => {
 
             <div className="search-section">
                 <div className="search-bar">
-                    <span className="search-icon">🔍</span>
+                    <span className="search-icon"></span>
                     <input
                         type="text"
                         className="search-input"
@@ -178,4 +178,19 @@ const SearchPage = () => {
                                 <DrugCard
                                     key={cardKey}
                                     drug={drug}
-                                    onClick={() => navigate(`
+                                    onClick={() => navigate(`/drug-details?name=${encodeURIComponent(drug.ชื่อการค้า)}`)}
+                                />
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="no-results">
+                        <p>ไม่พบผลการค้นหา</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default SearchPage;
