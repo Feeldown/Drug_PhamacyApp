@@ -42,7 +42,7 @@ const DrugCard = ({ drug, onClick }: { drug: DrugData, onClick: () => void }) =>
             <div className="drug-card-image">{drugIcon}</div>
             <div className="drug-card-info">
                 <h4>{drug.ชื่อการค้า}</h4>
-                <p>{drug.ชื่อสามัญ}</p>
+                {/* <p>{drug.ชื่อสามัญ}</p> */}
                 <span className="drug-card-form">{drug.รูปแบบยา}</span>
             </div>
         </div>
