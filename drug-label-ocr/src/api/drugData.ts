@@ -18,104 +18,93 @@ export interface DrugForm {
   count: number;
 }
 
-// Import drug data
-import drugData from '../data/drug_backup.json';
+const API_BASE = 'https://drug-phamacyapp.onrender.com/api';
 
-// API functions
-export const getAllDrugs = (): DrugData[] => {
-  return drugData;
+export const getAllDrugs = async (): Promise<DrugData[]> => {
+  const res = await fetch(`${API_BASE}/drugs`);
+  return res.json();
 };
 
-export const searchDrugsByName = (query: string): DrugData[] => {
+export const searchDrugsByName = async (query: string): Promise<DrugData[]> => {
+  const all = await getAllDrugs();
   const normalizedQuery = query.toLowerCase();
-  return drugData.filter(
+  return all.filter(
     (drug) =>
       drug.ชื่อสามัญ.toLowerCase().includes(normalizedQuery) ||
       drug.ชื่อการค้า.toLowerCase().includes(normalizedQuery)
   );
 };
 
-export const searchDrugsByGenericName = (query: string): DrugData[] => {
+export const searchDrugsByGenericName = async (query: string): Promise<DrugData[]> => {
+  const all = await getAllDrugs();
   const normalizedQuery = query.toLowerCase();
-  return drugData.filter((drug) =>
+  return all.filter((drug) =>
     drug.ชื่อสามัญ.toLowerCase().includes(normalizedQuery)
   );
 };
 
-export const searchDrugsByBrandName = (query: string): DrugData[] => {
+export const searchDrugsByBrandName = async (query: string): Promise<DrugData[]> => {
+  const all = await getAllDrugs();
   const normalizedQuery = query.toLowerCase();
-  return drugData.filter((drug) =>
+  return all.filter((drug) =>
     drug.ชื่อการค้า.toLowerCase().includes(normalizedQuery)
   );
 };
 
-export const getDrugByBrandName = (brandName: string): DrugData | undefined => {
-  return drugData.find(
-    (drug) => drug.ชื่อการค้า.toLowerCase() === brandName.toLowerCase()
-  );
+export const getDrugByBrandName = async (brandName: string): Promise<DrugData | undefined> => {
+  const res = await fetch(`${API_BASE}/drug/${encodeURIComponent(brandName)}`);
+  if (res.ok) return res.json();
+  return undefined;
 };
 
-export const getDrugByGenericName = (genericName: string): DrugData | undefined => {
-  return drugData.find(
+export const getDrugByGenericName = async (genericName: string): Promise<DrugData | undefined> => {
+  const all = await getAllDrugs();
+  return all.find(
     (drug) => drug.ชื่อสามัญ.toLowerCase() === genericName.toLowerCase()
   );
 };
 
-export const getDrugsByForm = (form: string): DrugData[] => {
+export const getDrugsByForm = async (form: string): Promise<DrugData[]> => {
+  const all = await getAllDrugs();
   const normalizedForm = form.toLowerCase();
-  return drugData.filter(
+  return all.filter(
     (drug) => drug.รูปแบบยา.toLowerCase().includes(normalizedForm)
   );
 };
 
-export const getDrugByName = (name: string): DrugData | undefined => {
-  const normalizedName = name.toLowerCase();
-  return drugData.find(
-    (drug) =>
-      drug.ชื่อการค้า.toLowerCase() === normalizedName ||
-      drug.ชื่อสามัญ.toLowerCase() === normalizedName
-  );
+export const getDrugByName = async (name: string): Promise<DrugData | undefined> => {
+  const res = await fetch(`${API_BASE}/drug/${encodeURIComponent(name)}`);
+  if (res.ok) return res.json();
+  return undefined;
 };
 
-// Helper function to get unique drug forms with counts
-export const getUniqueDrugForms = (): DrugForm[] => {
-  const formCounts = drugData.reduce((acc, drug) => {
-    const form = drug.รูปแบบยา;
-    if (form) { // Ensure the form is not an empty string
-      acc[form] = (acc[form] || 0) + 1;
-    }
-    return acc;
-  }, {} as Record<string, number>);
-
-  return Object.entries(formCounts).map(([form, count]) => ({
-    form,
-    count,
-  })).sort((a, b) => b.count - a.count); // Sort by count descending
+export const getUniqueDrugForms = async (): Promise<DrugForm[]> => {
+  const res = await fetch(`${API_BASE}/forms`);
+  return res.json();
 };
 
-// Enhanced search function that includes drug uses and side effects
-export const searchDrugsEnhanced = (
+export const searchDrugsEnhanced = async (
   query: string,
   searchType: 'all' | 'generic' | 'brand' = 'all',
   drugList?: DrugData[]
-): DrugData[] => {
+): Promise<DrugData[]> => {
+  const all = drugList || await getAllDrugs();
   const normalizedQuery = query.toLowerCase();
-  const list = drugList || drugData;
   switch (searchType) {
     case 'generic':
-      return list.filter(drug => 
+      return all.filter(drug => 
         drug.ชื่อสามัญ.toLowerCase().includes(normalizedQuery) ||
         drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(normalizedQuery) ||
         drug['อาการไม่พึงประสงค์ทั่วไป'].toLowerCase().includes(normalizedQuery)
       );
     case 'brand':
-      return list.filter(drug => 
+      return all.filter(drug => 
         drug.ชื่อการค้า.toLowerCase().includes(normalizedQuery) ||
         drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(normalizedQuery) ||
         drug['อาการไม่พึงประสงค์ทั่วไป'].toLowerCase().includes(normalizedQuery)
       );
     default:
-      return list.filter(drug =>
+      return all.filter(drug =>
         drug.ชื่อสามัญ.toLowerCase().includes(normalizedQuery) ||
         drug.ชื่อการค้า.toLowerCase().includes(normalizedQuery) ||
         drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(normalizedQuery) ||
@@ -124,34 +113,25 @@ export const searchDrugsEnhanced = (
   }
 };
 
-// Get similar drugs based on form and uses
-export const getSimilarDrugs = (currentDrug: DrugData, limit: number = 5): DrugData[] => {
-  const sameFormDrugs = drugData.filter(
+export const getSimilarDrugs = async (currentDrug: DrugData, limit: number = 5): Promise<DrugData[]> => {
+  const all = await getAllDrugs();
+  const sameFormDrugs = all.filter(
     (drug) =>
       drug.รูปแบบยา === currentDrug.รูปแบบยา &&
       drug.ชื่อการค้า !== currentDrug.ชื่อการค้า
   );
-
-  // Get drugs with similar uses
-  const similarUsesDrugs = drugData.filter(
+  const similarUsesDrugs = all.filter(
     (drug) =>
       drug.ชื่อการค้า !== currentDrug.ชื่อการค้า &&
       drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(
         currentDrug['ยานี้ใช้สำหรับ'].toLowerCase().split(' ')[0]
       )
   );
-
-  // Combine and deduplicate results
   const combined = [...sameFormDrugs, ...similarUsesDrugs];
   const unique = Array.from(new Map(combined.map(drug => [drug.ชื่อการค้า, drug])).values());
-  
   return unique.slice(0, limit);
 };
 
 export const getDrugsByFormAsync = async (form: string): Promise<DrugData[]> => {
-  const normalizedForm = form.toLowerCase();
-  await new Promise((resolve) => setTimeout(resolve, 500)); // simulate API delay
-  return drugData.filter(
-    (drug) => drug.รูปแบบยา.toLowerCase() === normalizedForm
-  );
+  return getDrugsByForm(form);
 }; 
