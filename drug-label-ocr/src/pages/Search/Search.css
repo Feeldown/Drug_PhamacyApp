@@ -182,6 +182,7 @@
 
 .results-section {
     padding: 0 24px 40px;
+    padding-bottom: 100px;
 }
 
 .results-header {
@@ -200,6 +201,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    padding-bottom: 100px;
 }
 
 .drug-card {

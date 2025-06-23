@@ -182,6 +182,7 @@ const SearchPage = () => {
                                 />
                             );
                         })}
+                        <div style={{ height: 120 }} />
                     </div>
                 ) : (
                     <div className="no-results">

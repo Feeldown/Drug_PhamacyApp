@@ -1,3 +1,5 @@
+import localDrugBackup from '../data/drug_backup.json';
+
 // Drug data interfaces
 export interface DrugData {
   ชื่อสามัญ: string;
@@ -18,11 +20,8 @@ export interface DrugForm {
   count: number;
 }
 
-const API_BASE = 'https://drug-phamacyapp.onrender.com/api';
-
 export const getAllDrugs = async (): Promise<DrugData[]> => {
-  const res = await fetch(`${API_BASE}/drugs`);
-  return res.json();
+  return localDrugBackup as DrugData[];
 };
 
 export const searchDrugsByName = async (query: string): Promise<DrugData[]> => {
@@ -52,9 +51,10 @@ export const searchDrugsByBrandName = async (query: string): Promise<DrugData[]>
 };
 
 export const getDrugByBrandName = async (brandName: string): Promise<DrugData | undefined> => {
-  const res = await fetch(`${API_BASE}/drug/${encodeURIComponent(brandName)}`);
-  if (res.ok) return res.json();
-  return undefined;
+  const all = await getAllDrugs();
+  return all.find(
+    (drug) => drug.ชื่อการค้า.toLowerCase() === brandName.toLowerCase()
+  );
 };
 
 export const getDrugByGenericName = async (genericName: string): Promise<DrugData | undefined> => {
@@ -73,14 +73,34 @@ export const getDrugsByForm = async (form: string): Promise<DrugData[]> => {
 };
 
 export const getDrugByName = async (name: string): Promise<DrugData | undefined> => {
-  const res = await fetch(`${API_BASE}/drug/${encodeURIComponent(name)}`);
-  if (res.ok) return res.json();
-  return undefined;
+  const normalized = name.trim().toLowerCase();
+  // ค้นหาชื่อการค้า
+  let found = (localDrugBackup as DrugData[]).find(drug =>
+    drug.ชื่อการค้า.trim().toLowerCase() === normalized
+  ) ||
+  (localDrugBackup as DrugData[]).find(drug =>
+    drug.ชื่อการค้า.replace(/\s+/g, '').toLowerCase() === normalized.replace(/\s+/g, '')
+  );
+  // ถ้าไม่เจอ ลองค้นหาชื่อสามัญ
+  if (!found) {
+    found = (localDrugBackup as DrugData[]).find(drug =>
+      drug.ชื่อสามัญ.trim().toLowerCase() === normalized
+    ) ||
+    (localDrugBackup as DrugData[]).find(drug =>
+      drug.ชื่อสามัญ.replace(/\s+/g, '').toLowerCase() === normalized.replace(/\s+/g, '')
+    );
+  }
+  return found;
 };
 
 export const getUniqueDrugForms = async (): Promise<DrugForm[]> => {
-  const res = await fetch(`${API_BASE}/forms`);
-  return res.json();
+  const all = localDrugBackup as DrugData[];
+  const formMap: { [form: string]: number } = {};
+  all.forEach(drug => {
+    const form = drug.รูปแบบยา.trim();
+    formMap[form] = (formMap[form] || 0) + 1;
+  });
+  return Object.entries(formMap).map(([form, count]) => ({ form, count }));
 };
 
 export const searchDrugsEnhanced = async (

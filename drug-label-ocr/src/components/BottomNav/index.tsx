@@ -24,10 +24,6 @@ const BottomNav = () => {
                         <span className="nav-label">{item.label}</span>
                     </NavLink>
                 ))}
-                <Link to="/ocr-camera" className="nav-item">
-                    <span className="nav-icon">📷</span>
-                    <span className="nav-label">OCR กล้อง</span>
-                </Link>
             </div>
         </nav>
     );

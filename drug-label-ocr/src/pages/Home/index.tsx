@@ -120,9 +120,6 @@ const HomePage: React.FC = () => {
       </nav>
 
       <div style={{ margin: '16px 0' }}>
-        <Link to="/ocr-camera">
-          <button>เปิดกล้อง OCR</button>
-        </Link>
       </div>
     </div>
   );
