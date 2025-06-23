@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import './BottomNav.css';
 
 const navItems = [
@@ -24,6 +24,10 @@ const BottomNav = () => {
                         <span className="nav-label">{item.label}</span>
                     </NavLink>
                 ))}
+                <Link to="/ocr-camera" className="nav-item">
+                    <span className="nav-icon">📷</span>
+                    <span className="nav-label">OCR กล้อง</span>
+                </Link>
             </div>
         </nav>
     );

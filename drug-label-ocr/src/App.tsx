@@ -8,6 +8,7 @@ import CategoriesPage from './pages/Categories';
 import CategoryResultPage from './pages/CategoryResult';
 import HelpPage from './pages/Help';
 import DrugDetailsPage from './pages/DrugDetails';
+import OCRCamera from './pages/Scan/OCRCamera';
 
 import './styles/global.css';
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/categories/:form" element={<CategoryResultPage />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/drugs/:drugName" element={<DrugDetailsPage />} />
+          <Route path="/ocr-camera" element={<OCRCamera />} />
         </Routes>
       </Layout>
     </BrowserRouter>
