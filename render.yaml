@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: drug-phamacy-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+
+  - type: web
+    name: drug-phamacy-frontend
+    env: node
+    rootDir: drug-label-ocr
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview -- --port 4173
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 4173 
