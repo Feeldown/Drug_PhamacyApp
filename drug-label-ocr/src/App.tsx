@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Layout from './components/Layout';
 import HomePage from './pages/Home';
-import SearchPage from './pages/Search';
+import SearchPage, { SearchResult } from './pages/Search';
 import ScanPage from './pages/Scan';
 import CategoriesPage from './pages/Categories';
 import CategoryResultPage from './pages/CategoryResult';
@@ -19,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/result" element={<SearchResult />} />
           <Route path="/scan" element={<ScanPage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/categories/:form" element={<CategoryResultPage />} />
