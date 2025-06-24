@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getDrugByName, DrugData, getSimilarDrugs } from '../../api/drugData';
 import './DrugDetails.css';
 
@@ -52,7 +52,9 @@ const DrugCard = ({ drug, onClick }: { drug: DrugData, onClick: () => void }) =>
 const DrugDetailsPage = () => {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const drugName = params.get('name') || '';
+    const queryDrugName = params.get('name') || '';
+    const { name: pathDrugName } = useParams();
+    const drugName = queryDrugName || pathDrugName || '';
     const navigate = useNavigate();
     const [drug, setDrug] = useState<DrugData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -63,14 +65,14 @@ const DrugDetailsPage = () => {
         const fetchDrug = async () => {
             if (drugName) {
                 try {
-                    const decodedName = decodeURIComponent(drugName);
+                    // normalize: decodeURIComponent, trim, toLowerCase
+                    const decodedName = decodeURIComponent(drugName).trim();
                     const foundDrug = await getDrugByName(decodedName);
                     if (foundDrug) {
                         setDrug(foundDrug);
                         // Get similar drugs
                         const similar = await getSimilarDrugs(foundDrug);
                         setSimilarDrugs(similar);
-                        
                         // Update recently viewed
                         const recent = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
                         const updatedRecent = [
@@ -88,9 +90,11 @@ const DrugDetailsPage = () => {
                 } finally {
                     setLoading(false);
                 }
+            } else {
+                setDrug(null);
+                setLoading(false);
             }
         };
-
         fetchDrug();
     }, [drugName]);
 
@@ -117,7 +121,7 @@ const DrugDetailsPage = () => {
             <header className="header">
                 <button onClick={() => navigate(-1)} className="back-btn">←</button>
                 <h1 className="drug-title">{drug.ชื่อสามัญ}</h1>
-                <p className="drug-subtitle">{drug.ชื่อการค้า}</p>
+                {/* <p className="drug-subtitle">{drug.ชื่อการค้า}</p> */}
             </header>
 
             <section className="drug-image-section">

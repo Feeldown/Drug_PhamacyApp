@@ -2,14 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllDrugs, DrugData } from '../../api/drugData';
 
-const SUGGESTIONS = [
-    'Paracetamol',
-    'Amoxicillin',
-    'Ibuprofen',
-    'Cetirizine',
-    'Omeprazole',
-];
-
 const SearchInput = () => {
     const navigate = useNavigate();
     const [query, setQuery] = useState('');
@@ -19,10 +11,25 @@ const SearchInput = () => {
     });
     const [allDrugs, setAllDrugs] = useState<DrugData[]>([]);
     const [suggestedDrugs, setSuggestedDrugs] = useState<DrugData[]>([]);
+    const [randomSuggestions, setRandomSuggestions] = useState<string[]>([]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        getAllDrugs().then(setAllDrugs);
+        getAllDrugs().then(drugs => {
+            setAllDrugs(drugs);
+            // สุ่มชื่อการค้า 5 รายการ (หรือถ้าไม่มีชื่อการค้า ให้ใช้ชื่อสามัญ)
+            const names = drugs.map(d => d.ชื่อการค้า || d.ชื่อสามัญ).filter(Boolean);
+            const picked: string[] = [];
+            const used = new Set();
+            while (picked.length < 5 && used.size < names.length) {
+                const idx = Math.floor(Math.random() * names.length);
+                if (!used.has(idx)) {
+                    picked.push(names[idx]);
+                    used.add(idx);
+                }
+            }
+            setRandomSuggestions(picked);
+        });
     }, []);
 
     useEffect(() => {
@@ -89,7 +96,7 @@ const SearchInput = () => {
                     {query && (
                         <button onClick={handleClearQuery} style={{ position: 'absolute', right: 10, background: 'none', border: 'none', fontSize: 18, cursor: 'pointer', color: '#888' }}>✕</button>
                     )}
-                    <button onClick={handleSearchBtn} style={{ marginLeft: 8, padding: '8px 16px', borderRadius: 20, border: 'none', background: '#4263eb', color: 'white', fontWeight: 500, cursor: 'pointer' }}>ค้นหา</button>
+                    {/* <button onClick={handleSearchBtn} style={{ marginLeft: 8, padding: '8px 16px', borderRadius: 20, border: 'none', background: '#4263eb', color: 'white', fontWeight: 500, cursor: 'pointer' }}>ค้นหา</button> */}
                     {suggestedDrugs.length > 0 && (
                         <ul style={{
                             position: 'absolute',
@@ -143,7 +150,7 @@ const SearchInput = () => {
                     )}
                     <div style={{ fontWeight: 600, marginBottom: 4 }}>แนะนำให้ค้นหา</div>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                        {SUGGESTIONS.map((item, idx) => (
+                        {randomSuggestions.map((item, idx) => (
                             <li key={item+idx}>
                                 <button onClick={() => handleSuggestionClick(item)} style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', padding: '4px 0', fontSize: 15, textAlign: 'left' }}>{item}</button>
                             </li>

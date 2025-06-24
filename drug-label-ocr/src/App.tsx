@@ -25,6 +25,7 @@ function App() {
           <Route path="/categories/:form" element={<CategoryResultPage />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/drug-details" element={<DrugDetailsPage />} />
+          <Route path="/drugs/:name" element={<DrugDetailsPage />} />
           <Route path="/ocr-camera" element={<OCRCamera />} />
         </Routes>
       </Layout>

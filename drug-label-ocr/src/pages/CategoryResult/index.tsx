@@ -68,15 +68,20 @@ const CategoryResultPage = () => {
                 </div>
             </header>
 
-            <div className="search-bar">
-                <span className="search-icon">🔍</span>
+            <div className="search-bar" style={{ position: 'relative', display: 'flex', alignItems: 'center', marginBottom: 24 }}>
+                <span className="search-icon" style={{ position: 'absolute', left: 16, fontSize: 20, color: '#4263eb' }}>🔍</span>
                 <input
                     type="text"
                     className="search-input"
                     placeholder="ค้นหายาในหมวดหมู่นี้..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{ paddingLeft: 40, paddingRight: 40 }}
+                    autoComplete="off"
                 />
+                {searchQuery && (
+                    <button onClick={() => setSearchQuery('')} style={{ position: 'absolute', right: 10, background: 'none', border: 'none', fontSize: 18, cursor: 'pointer', color: '#888' }}>✕</button>
+                )}
             </div>
 
             {loading ? (
