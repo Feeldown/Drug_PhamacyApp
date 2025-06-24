@@ -36,6 +36,8 @@ const SearchPage = () => {
     const [activeFilter, setActiveFilter] = useState('ทั้งหมด');
     const [isLoading, setIsLoading] = useState(true);
     const [searchType, setSearchType] = useState<'all' | 'generic' | 'brand'>('all');
+    const [filteredResults, setFilteredResults] = useState<DrugData[]>([]);
+    const [isFiltering, setIsFiltering] = useState(false);
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -54,18 +56,23 @@ const SearchPage = () => {
         fetchInitialData();
     }, []);
 
-    const filteredResults = useMemo(() => {
-        let base = allDrugs;
-        if (activeFilter !== 'ทั้งหมด') {
-            const normalizedFilter = activeFilter.trim().toLowerCase();
-            base = allDrugs.filter(drug => drug.รูปแบบยา.trim().toLowerCase() === normalizedFilter);
-        }
-        if (query.trim() !== '') {
-            base = searchDrugsEnhanced(query, searchType, base);
-        }
-        const sorted = [...base].sort((a, b) => a.ชื่อการค้า.localeCompare(b.ชื่อการค้า));
-        console.log('filteredResults FINAL:', sorted.map(d => d.ชื่อการค้า + ' | ' + d.รูปแบบยา));
-        return sorted;
+    useEffect(() => {
+        const filterDrugs = async () => {
+            setIsFiltering(true);
+            let base = allDrugs;
+            if (activeFilter !== 'ทั้งหมด') {
+                const normalizedFilter = activeFilter.trim().toLowerCase();
+                base = allDrugs.filter(drug => drug.รูปแบบยา.trim().toLowerCase() === normalizedFilter);
+            }
+            let results = base;
+            if (query.trim() !== '') {
+                results = await searchDrugsEnhanced(query, searchType, base);
+            }
+            const sorted = [...results].sort((a, b) => a.ชื่อการค้า.localeCompare(b.ชื่อการค้า));
+            setFilteredResults(sorted);
+            setIsFiltering(false);
+        };
+        filterDrugs();
     }, [allDrugs, query, searchType, activeFilter]);
 
     useEffect(() => {
@@ -164,7 +171,7 @@ const SearchPage = () => {
                     <span className="results-count">พบ {filteredResults.length} รายการ</span>
                 </div>
 
-                {isLoading ? (
+                {(isLoading || isFiltering) ? (
                     <div className="loading-state">
                         <div className="loading-spinner" />
                         <p>กำลังค้นหา...</p>

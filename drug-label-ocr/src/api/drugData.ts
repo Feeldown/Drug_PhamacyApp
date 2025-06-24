@@ -1,4 +1,4 @@
-import localDrugBackup from '../data/drug_backup.json';
+  import localDrugBackup from '../data/drug_backup.json';
 
 // Drug data interfaces
 export interface DrugData {
