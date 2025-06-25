@@ -67,7 +67,7 @@ const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
         <CircularProgress variant="determinate" value={progress} />
         <Typography variant="body2">{Math.round(progress)}%</Typography>
         {error && (
-          <Typography color="error">{error}</Typography>
+          <Typography color="error">เกิดข้อผิดพลาดในการประมวลผลรูปภาพ กรุณาลองใหม่อีกครั้ง</Typography>
         )}
       </Box>
     </Paper>

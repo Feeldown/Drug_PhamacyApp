@@ -747,8 +747,8 @@ def fill_missing_data(driver, data):
                             return
             except:
                 pass
-    except:
-        pass
+    except Exception as e:
+        logger.error(f"Error in fill_missing_data: {e}")
 
 def extract_from_html_elements(driver, data):
     """ดึงข้อมูลจาก HTML elements โดยตรง"""
@@ -855,8 +855,8 @@ def extract_from_element_content(element, data):
                     if content_lines:
                         content = "\n".join(content_lines)
                         data[section] = clean_single_line_content(content) if section in ["ชื่อสามัญ", "ชื่อการค้า", "รูปแบบยา"] else format_as_bullets(content_lines)
-    except:
-        pass
+    except Exception as e:
+        logger.error(f"Error extracting drug usage: {e}")
 
 def get_next_sibling_element(driver, element):
     """หา element ถัดไป"""

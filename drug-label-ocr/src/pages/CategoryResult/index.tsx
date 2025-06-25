@@ -26,27 +26,24 @@ const CategoryResultPage = () => {
     const [drugs, setDrugs] = useState<DrugData[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-
-    console.log('CategoryResultPage render, form:', form);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log('useEffect triggered, form:', form);
         const fetchDrugs = async () => {
             if (form) {
                 setLoading(true);
+                setError(null);
                 try {
-                    console.log('form from URL:', form);
                     const normalizedForm = decodeURIComponent(form).trim().toLowerCase();
-                    console.log('normalizedForm:', normalizedForm);
                     const formDrugs = await getDrugsByFormAsync(normalizedForm);
                     setDrugs(formDrugs);
                 } catch (error) {
-                    console.error("Error fetching drugs:", error, 'form:', form);
+                    setError('เกิดข้อผิดพลาดในการโหลดข้อมูลยา');
                 } finally {
                     setLoading(false);
                 }
             } else {
-                console.warn('form is undefined or empty');
+                setError('ไม่พบหมวดหมู่ยา');
             }
         };
         fetchDrugs();
@@ -57,6 +54,10 @@ const CategoryResultPage = () => {
         drug.ชื่อสามัญ.toLowerCase().includes(searchQuery.toLowerCase()) ||
         drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    if (error) {
+        return <div className="category-result-page"><p style={{color: 'red', textAlign: 'center'}}>{error}</p></div>;
+    }
 
     return (
         <div className="category-result-page">
