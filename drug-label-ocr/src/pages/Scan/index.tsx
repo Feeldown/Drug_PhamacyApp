@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import Webcam from 'react-webcam';
 import './Scan.css';
+import OCRProcessor from '../../components/OCR/OCRProcessor';
 
 const navItems = [
   { to: '/', label: 'หน้าหลัก', icon: '🏠' },
@@ -39,6 +40,8 @@ const ScanPage = () => {
     const [activeTab, setActiveTab] = useState<Tab>('camera');
     const [image, setImage] = useState<string | null>(null);
     const [results, setResults] = useState<any[] | null>(null);
+    const [processing, setProcessing] = useState(false);
+    const [ocrText, setOcrText] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const webcamRef = useRef<Webcam>(null);
     const [cameraError, setCameraError] = useState<string>('');
@@ -49,11 +52,8 @@ const ScanPage = () => {
             const imgSrc = webcamRef.current.getScreenshot();
             if (imgSrc) {
                 setImage(imgSrc);
-                // mock OCR
-                setResults([
-                    { name: 'ยาพาราเซตามอล', match: 95 },
-                    { name: 'ไอบูโพรเฟน', match: 88 }
-                ]);
+                setResults(null);
+                setProcessing(true);
             }
         }
     };
@@ -65,14 +65,28 @@ const ScanPage = () => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImage(reader.result as string);
-                setResults([
-                    { name: 'ยาพาราเซตามอล', match: 95 },
-                    { name: 'ไอบูโพรเฟน', match: 88 }
-                ]);
+                setResults(null);
+                setProcessing(true);
             };
             reader.readAsDataURL(file);
         }
     }, []);
+
+    // รับผลลัพธ์จาก OCR จริง
+    const handleOCRResult = (text: string) => {
+        setOcrText(text);
+        setProcessing(false);
+        // ตัวอย่าง: แปลง text เป็นผลลัพธ์ยา (ควรปรับเป็น logic จริง)
+        if (text && text.trim()) {
+            // ตัวอย่าง: mock match เฉพาะถ้ามีข้อความจริง
+            setResults([
+                { name: 'ยาพาราเซตามอล', match: 95 },
+                { name: 'ไอบูโพรเฟน', match: 88 }
+            ]);
+        } else {
+            setResults(null);
+        }
+    };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -145,8 +159,21 @@ const ScanPage = () => {
                 <img src={image} alt="preview" className="preview-image" />
             )}
 
-            {/* แสดงผล OCR */}
-            {results && (
+            {/* แสดง OCRProcessor ขณะกำลังประมวลผล */}
+            {image && processing && (
+                <OCRProcessor imageSrc={image} onResult={handleOCRResult} />
+            )}
+
+            {/* แสดงผล OCR ดิบ (optional) */}
+            {ocrText && !processing && (
+                <div style={{ margin: '16px', background: '#f8f8f8', padding: 8, borderRadius: 8 }}>
+                    <b>ข้อความที่อ่านได้:</b>
+                    <pre style={{ whiteSpace: 'pre-wrap' }}>{ocrText}</pre>
+                </div>
+            )}
+
+            {/* แสดงผลลัพธ์ OCR (mock เฉพาะเมื่อมีข้อความจริง) */}
+            {results && !processing && (
                 <div className="search-results">
                     <div className="results-header">
                         <h2 className="results-title">ผลการค้นหา</h2>
