@@ -37,7 +37,7 @@ def generate_keywords():
     """อ่านรายชื่อยาจากไฟล์เพื่อใช้เป็นคำค้นหา โดยดึงเฉพาะชื่อยาที่อยู่ใน double quotes"""
     try:
         import re
-        with open('Name_Ya_all.txt', 'r', encoding='utf-8') as f:
+        with open('../data/Name_Ya_all.txt', 'r', encoding='utf-8') as f:
             content = f.read()
             
             # นับจำนวนบรรทัดทั้งหมด
@@ -67,10 +67,10 @@ def generate_keywords():
             if skipped_names:
                 logger.warning(f"มีชื่อยาที่ถูกข้าม {len(skipped_names)} รายการ")
                 # บันทึกชื่อยาที่ถูกข้ามลงไฟล์
-                with open('skipped_drug_names.txt', 'w', encoding='utf-8') as f:
+                with open('../data/skipped_drug_names.txt', 'w', encoding='utf-8') as f:
                     for name in skipped_names:
                         f.write(f"{name}\n")
-                logger.info("บันทึกรายชื่อยาที่ถูกข้ามไว้ใน skipped_drug_names.txt")
+                logger.info("บันทึกข้อมูลที่ถูกข้ามไว้ใน ../data/skipped_drug_names.txt")
             
             # ตรวจสอบและบันทึกข้อมูลชื่อยาที่ซ้ำกัน แต่ยังคงเก็บไว้ทั้งหมด
             name_counts = {}
@@ -81,10 +81,10 @@ def generate_keywords():
             if duplicates:
                 logger.info(f"พบชื่อยาที่ซ้ำกัน {len(duplicates)} รายการ (แต่จะเก็บไว้ทั้งหมด)")
                 # บันทึกชื่อยาที่ซ้ำกันลงไฟล์
-                with open('duplicate_drug_names.txt', 'w', encoding='utf-8') as f:
+                with open('../data/duplicate_drug_names.txt', 'w', encoding='utf-8') as f:
                     for name, count in sorted(duplicates.items()):
                         f.write(f"{name} (ซ้ำ {count} ครั้ง)\n")
-                logger.info("บันทึกรายชื่อยาที่ซ้ำกันไว้ใน duplicate_drug_names.txt")
+                logger.info("บันทึกข้อมูลชื่อยาที่ซ้ำกันไว้ใน ../data/duplicate_drug_names.txt")
             
             return cleaned_names  # ส่งคืนชื่อยาทั้งหมด รวมทั้งชื่อที่ซ้ำกัน
             
@@ -1228,8 +1228,8 @@ def setup_driver():
 def load_processed_keywords():
     """โหลดรายการ keywords ที่ประมวลผลไปแล้ว"""
     try:
-        if os.path.exists("processed_keywords.txt"):
-            with open("processed_keywords.txt", "r", encoding="utf-8") as f:
+        if os.path.exists("../data/processed_keywords.txt"):
+            with open("../data/processed_keywords.txt", "r", encoding="utf-8") as f:
                 return set(line.strip() for line in f if line.strip())
         return set()
     except Exception as e:
@@ -1239,7 +1239,7 @@ def load_processed_keywords():
 def save_processed_keywords(keywords):
     """บันทึกรายการ keywords ที่ประมวลผลไปแล้ว"""
     try:
-        with open("processed_keywords.txt", "w", encoding="utf-8") as f:
+        with open("../data/processed_keywords.txt", "w", encoding="utf-8") as f:
             for keyword in sorted(keywords):
                 f.write(f"{keyword}\n")
         logger.info(f"บันทึก processed keywords: {len(keywords)} รายการ")
@@ -1269,7 +1269,7 @@ def main():
         except NoSuchElementException:
             pass
 
-        all_drugs = load_existing_data("drug_backup.csv")
+        all_drugs = load_existing_data("../data/drug_backup.csv")
         keywords = generate_keywords()
         
         # กรองเฉพาะ keywords ที่ยังไม่ได้ประมวลผล
@@ -1431,15 +1431,15 @@ def main():
             # แสดงสถิติและบันทึก backup
             print_summary_stats(all_drugs, keyword, idx + 1)
             if len(all_drugs) > 0 and len(all_drugs) % 20 == 0:
-                save_all_formats(all_drugs, "drug_backup.csv")
+                save_all_formats(all_drugs, "../data/drug_backup.csv")
                 save_processed_keywords(processed_keywords)
                 logger.info(f"📝 บันทึกข้อมูล backup: {len(all_drugs)} รายการ")
 
             time.sleep(random.uniform(1, 3))
 
         # บันทึกข้อมูลสุดท้าย
-        save_all_formats(all_drugs, "drug_full_details.csv")
-        save_all_formats(all_drugs, "drug_backup.csv")
+        save_all_formats(all_drugs, "../data/drug_full_details.csv")
+        save_all_formats(all_drugs, "../data/drug_backup.csv")
         save_processed_keywords(processed_keywords)
         logger.info(f"✅ บันทึกข้อมูลทั้งหมด {len(all_drugs)} รายการเรียบร้อยแล้ว")
 

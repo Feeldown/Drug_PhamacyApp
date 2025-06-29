@@ -7,14 +7,14 @@ def load_drug_forms():
     forms = []
     
     # Try loading from JSON first
-    if os.path.exists('drug_full_details.json'):
-        with open('drug_full_details.json', 'r', encoding='utf-8') as f:
+    if os.path.exists('data/drug_full_details.json'):
+        with open('data/drug_full_details.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
             forms.extend([item.get('รูปแบบยา', '').strip() for item in data if item.get('รูปแบบยา')])
     
     # Try loading from CSV as backup
-    elif os.path.exists('drug_full_details.csv'):
-        with open('drug_full_details.csv', 'r', encoding='utf-8-sig') as f:
+    elif os.path.exists('data/drug_full_details.csv'):
+        with open('data/drug_full_details.csv', 'r', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             forms.extend([row.get('รูปแบบยา', '').strip() for row in reader if row.get('รูปแบบยา')])
     
