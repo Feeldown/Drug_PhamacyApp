@@ -2,6 +2,45 @@
 
 โปรเจกต์นี้เป็นระบบช่วยค้นหาและวิเคราะห์ข้อมูลยาในประเทศไทย ประกอบด้วยทั้ง Web Application (React + OCR) และเครื่องมือ Python สำหรับประมวลผลข้อมูลยา
 
+## โครงสร้างโปรเจค (อัปเดต 2024)
+
+```
+Drug_PhamacyApp/
+│
+├── backend/                  # โค้ด Python และข้อมูล
+│   ├── analyze_drug_forms.py
+│   ├── chromedriver.exe
+│   ├── count_drugs.py
+│   ├── duplicate_drug_names.txt
+│   ├── Name_Ya_all.txt
+│   ├── processed_keywords.txt
+│   ├── requirements.txt
+│   ├── skipped_drug_names.txt
+│   ├── test_model/
+│   └── data/
+│       ├── drug_backup.csv
+│       ├── drug_backup.json
+│       ├── drug_backup.txt
+│       ├── drug_backup.xlsx
+│       ├── drug_full_details.csv
+│       ├── drug_full_details.json
+│       ├── drug_full_details.txt
+│       └── drug_full_details.xlsx
+│
+├── frontend/
+│   └── drug-label-ocr/       # React App (Vite)
+│
+├── docs/
+│   ├── notefile/
+│   └── Web_app/
+│
+├── README.md
+├── render.yaml
+├── vercel.json
+├── .gitignore
+└── (ไฟล์ config อื่นๆ)
+```
+
 ## อัปเดตล่าสุด
 
 - ระบบ Web App (React) เปลี่ยนเป็นใช้ไฟล์ local (`drug_backup.json`) เป็นหลัก 100% ไม่ต้องพึ่ง API ภายนอก
@@ -41,19 +80,25 @@
 ## วิธีเริ่มต้นใช้งาน
 
 ### Web Application (React)
-1. เข้าโฟลเดอร์ `drug-label-ocr`
+1. เข้าโฟลเดอร์ `frontend/drug-label-ocr`
 2. ติดตั้ง dependencies ด้วย `npm install`
 3. รันแอปด้วย `npm start`
 4. เปิดใช้งานที่ http://localhost:3000
 
 ### Python Tools
-- ใช้ Python 3.x และติดตั้ง dependencies จาก `requirements.txt`
-- รันแต่ละสคริปต์ตามต้องการ เช่น
-  ```
-  python count_drugs.py
-  python analyze_drug_forms.py
-  python test_model/web_test_v05.1.py
-  ```
+1. เข้าโฟลเดอร์ `backend/`
+2. ติดตั้ง dependencies จาก `requirements.txt`
+3. รันแต่ละสคริปต์ตามต้องการ เช่น
+   ```
+   python count_drugs.py
+   python analyze_drug_forms.py
+   python test_model/web_test_v05.1.py
+   ```
+
+## หมายเหตุ
+- path ของไฟล์ข้อมูลในโค้ด Python จะอยู่ใน `backend/data/` เช่น `backend/data/drug_full_details.json`
+- test_model อยู่ใน `backend/test_model/`
+- เอกสารและโน้ตอยู่ใน `docs/`
 
 ---
 
