@@ -1,0 +1,41 @@
+.page-header {
+    padding: 24px;
+    background: white;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    text-align: center;
+}
+
+.page-header .header-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.page-header .header-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.page-header .back-btn {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    line-height: 1;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.page-header .back-btn:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+} 

@@ -1,0 +1,35 @@
+1.สร้างโครงสร้างการนำทางด้วย Tab Navigator และ Stack Navigator:
+    หน้าหลัก (Home)
+    ค้นหา (Search)
+    สแกนยา (Camera)
+    หมวดหมู่ (Category)
+    โปรไฟล์ (Profile)
+2.ออกแบบหน้าหลัก (HomeScreen) ให้เหมาะกับการใช้งานบนมือถือ:
+    ส่วนค้นหาด้านบน
+    Quick Actions แบบ grid 2 คอลัมน์
+    หมวดหมู่ยาแบบ horizontal scroll
+    สถิติการใช้งานด้านล่าง
+3.ใช้ Native Components:
+    TouchableOpacity สำหรับปุ่มกด
+    ScrollView สำหรับ scrolling
+    SafeAreaView สำหรับความเข้ากันได้กับ notch
+    StatusBar สำหรับแถบสถานะ
+4.การจัดการ Navigation:
+    ใช้ Stack Navigator สำหรับแต่ละ tab
+    ใช้ Bottom Tab Navigator สำหรับการนำทางหลัก
+    มีไอคอนและชื่อที่ชัดเจนสำหรับแต่ละ tab
+5.การออกแบบ UI:
+    ใช้ shadow และ elevation สำหรับความลึก
+    มีระยะห่างและ padding ที่เหมาะสม
+    ใช้ขนาดฟอนต์ที่อ่านง่ายบนมือถือ
+    มีการตอบสนองเมื่อกดปุ่ม
+6.Dependencies ที่จำเป็น:
+    React Navigation สำหรับการนำทาง
+    Expo Camera สำหรับฟีเจอร์สแกนยา
+    Vector Icons สำหรับไอคอน
+    Gesture Handler สำหรับการตอบสนองต่อการสัมผัส
+
+เพิ่มฟีเจอร์การสแกนยา
+ปรับแต่งหน้าค้นหา
+เพิ่มระบบการล็อกอิน
+ปรับแต่ง UI/UX เพิ่มเติม
