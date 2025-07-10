@@ -50,6 +50,7 @@ const ScanPage = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const webcamRef = useRef<Webcam>(null);
     const [cameraError, setCameraError] = useState<string>('');
+    const [ocrDebug, setOcrDebug] = useState<{ raw: string, keywords: string[], searches: Array<{ word: string, found: any[] }> }>({ raw: '', keywords: [], searches: [] });
 
     // ถ่ายภาพจาก webcam
     const handleCapture = () => {
@@ -84,24 +85,26 @@ const ScanPage = () => {
         console.log('OCR RAW:', text);
 
         if (text && text.trim()) {
-            // ดึงเฉพาะคำที่เป็นตัวอักษรล้วนและยาวกว่า 3 ตัวอักษร (อังกฤษ/ไทย)
             const matches = text.match(/[a-zA-Zก-๙]{3,}/g);
             const keywords = matches ? matches.map(w => w.toLowerCase()) : [];
             console.log('OCR KEYWORDS:', keywords);
 
             const allDrugs = await getAllDrugs();
             let results: any[] = [];
+            let searches: Array<{ word: string, found: any[] }> = [];
             for (const word of keywords) {
                 const found = await searchDrugsEnhanced(word, 'all', allDrugs);
                 console.log('SEARCH:', word, 'FOUND:', found);
+                searches.push({ word, found });
                 if (Array.isArray(found)) {
                     results = results.concat(found);
                 }
             }
-            // กำจัดซ้ำ
             results = results.filter((v, i, a) => a.findIndex(t => t.ชื่อการค้า === v.ชื่อการค้า) === i);
+            setOcrDebug({ raw: text, keywords, searches });
             setResults(results);
         } else {
+            setOcrDebug({ raw: text, keywords: [], searches: [] });
             setResults([]);
         }
     };
@@ -189,6 +192,13 @@ const ScanPage = () => {
                     <pre style={{ whiteSpace: 'pre-wrap' }}>{ocrText}</pre>
                 </div>
             )}
+
+            {/* แสดง debug OCR */}
+            <div style={{ background: '#f8f8f8', color: '#333', fontSize: 12, padding: 8, margin: 8, borderRadius: 8 }}>
+                <div><b>OCR RAW:</b> {ocrDebug.raw}</div>
+                <div><b>KEYWORDS:</b> {JSON.stringify(ocrDebug.keywords)}</div>
+                <div><b>SEARCHES:</b> {ocrDebug.searches.map(s => `${s.word} → [${Array.isArray(s.found) ? s.found.length : 0}]`).join(', ')}</div>
+            </div>
 
             {/* แสดงผลลัพธ์ OCR (mock เฉพาะเมื่อมีข้อความจริง) */}
             {console.log('DEBUG results:', results)}
