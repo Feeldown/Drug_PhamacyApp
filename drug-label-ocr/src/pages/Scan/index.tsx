@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import Webcam from 'react-webcam';
 import './Scan.css';
 import OCRProcessor from '../../components/OCR/OCRProcessor';
+import { searchDrugsEnhanced, getAllDrugs } from '../../api/drugData';
 
 const navItems = [
   { to: '/', label: 'หน้าหลัก', icon: '🏠' },
@@ -73,18 +74,15 @@ const ScanPage = () => {
     }, []);
 
     // รับผลลัพธ์จาก OCR จริง
-    const handleOCRResult = (text: string) => {
+    const handleOCRResult = async (text: string) => {
         setOcrText(text);
         setProcessing(false);
-        // ตัวอย่าง: แปลง text เป็นผลลัพธ์ยา (ควรปรับเป็น logic จริง)
         if (text && text.trim()) {
-            // ตัวอย่าง: mock match เฉพาะถ้ามีข้อความจริง
-            setResults([
-                { name: 'ยาพาราเซตามอล', match: 95 },
-                { name: 'ไอบูโพรเฟน', match: 88 }
-            ]);
+            const allDrugs = await getAllDrugs();
+            const results = await searchDrugsEnhanced(text, 'all', allDrugs);
+            setResults(Array.isArray(results) ? results : []);
         } else {
-            setResults(null);
+            setResults([]);
         }
     };
 
