@@ -93,6 +93,7 @@ const ScanPage = () => {
             let results: any[] = [];
             for (const word of keywords) {
                 const found = await searchDrugsEnhanced(word, 'all', allDrugs);
+                console.log('SEARCH:', word, 'FOUND:', found);
                 if (Array.isArray(found)) {
                     results = results.concat(found);
                 }
