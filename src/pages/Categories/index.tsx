@@ -81,7 +81,7 @@ const CategoriesPage = () => {
                     </h2>
                     <div className="search-methods">
                         <Link to="/search" className="search-method-card">
-                            <span className="method-icon">🔍</span>
+                            <span className="method-icon"></span>
                             <div className="method-info">
                                 <h3>ค้นหาด้วยชื่อ</h3>
                                 <p>ค้นหาด้วยชื่อยา, สรรพคุณ หรือ อาการไม่พึงประสงค์</p>
