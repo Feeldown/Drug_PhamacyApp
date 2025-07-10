@@ -1451,6 +1451,10 @@ BETNOVATE
 BETNOVATE SCALP APPLICATION
 BETOSONE CREAM
 BETRIS
+BETTO
+BEVELAR CREAM
+BEVITINE
+BEVON SYRUP
 Benralizumab
 abciximab
 acyclovir
@@ -1468,3 +1472,4 @@ atezolizumab
 axitinib
 bendamustine MYLAN
 bendamustine hydrochloride
+bevacizumab

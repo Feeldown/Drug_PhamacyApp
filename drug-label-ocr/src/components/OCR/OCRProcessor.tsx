@@ -68,13 +68,9 @@ const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
     let isMounted = true;
 
     const doOCR = async () => {
-      // Create worker with logger
+      // Create worker (ไม่ใส่ logger)
       const worker = await createWorker({
-        logger: (p: { status: string; progress: number }) => {
-          if (isMounted && p.status === 'recognizing text') {
-            setProgress(p.progress * 100);
-          }
-        }
+        langPath: '/tessdata'
       });
       
       try {
@@ -89,8 +85,14 @@ const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
           return;
         }
 
-        // Perform OCR
-        const { data: { text } } = await worker.recognize(processedImage);
+        // Perform OCR พร้อม logger สำหรับ progress
+        const { data: { text } } = await worker.recognize(processedImage, {
+          logger: (p: { status: string; progress: number }) => {
+            if (isMounted && p.status === 'recognizing text') {
+              setProgress(p.progress * 100);
+            }
+          }
+        });
         if (isMounted) {
           onResult(text);
         }
