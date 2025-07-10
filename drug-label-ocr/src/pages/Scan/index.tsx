@@ -198,7 +198,8 @@ const ScanPage = () => {
             {/* Bottom Navigation */}
             <nav className="bottom-nav">
                 <div className="nav-items">
-                    {navItems.map(item => (
+                    {console.log('DEBUG navItems:', navItems)}
+                    {Array.isArray(navItems) && navItems.map(item => (
                         <Link
                             key={item.label}
                             to={item.to}
