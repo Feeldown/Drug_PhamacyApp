@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import Webcam from 'react-webcam';
 import './Scan.css';
+import { searchDrugsEnhanced, getAllDrugs } from '../../api/drugData';
 
 const navItems = [
   { to: '/', label: 'หน้าหลัก', icon: '🏠' },
