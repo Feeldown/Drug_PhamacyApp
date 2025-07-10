@@ -68,17 +68,16 @@ const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
     let isMounted = true;
 
     const doOCR = async () => {
-      // Create worker with type assertion
-      const worker = (await createWorker()) as unknown as TesseractWorker;
-      
-      try {
-        // Set progress handler
-        worker.setProgressHandler((p) => {
+      // Create worker with logger
+      const worker = await createWorker({
+        logger: (p: { status: string; progress: number }) => {
           if (isMounted && p.status === 'recognizing text') {
             setProgress(p.progress * 100);
           }
-        });
-
+        }
+      });
+      
+      try {
         // Initialize worker
         await worker.loadLanguage('tha+eng');
         await worker.initialize('tha+eng');
