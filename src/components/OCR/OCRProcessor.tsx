@@ -35,8 +35,8 @@ const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
         });
 
         // Initialize worker
-        await worker.loadLanguage('eng');
-        await worker.initialize('eng');
+        await worker.loadLanguage('eng+tha');
+        await worker.initialize('eng+tha');
 
         // Perform OCR
         const { data: { text } } = await worker.recognize(imageSrc);
