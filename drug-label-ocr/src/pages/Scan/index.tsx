@@ -81,10 +81,25 @@ const ScanPage = () => {
     const handleOCRResult = async (text: string) => {
         setOcrText(text);
         setProcessing(false);
+        console.log('OCR RAW:', text);
+
         if (text && text.trim()) {
+            // ดึงเฉพาะคำที่เป็นตัวอักษรล้วนและยาวกว่า 3 ตัวอักษร (อังกฤษ/ไทย)
+            const matches = text.match(/[a-zA-Zก-๙]{3,}/g);
+            const keywords = matches ? matches.map(w => w.toLowerCase()) : [];
+            console.log('OCR KEYWORDS:', keywords);
+
             const allDrugs = await getAllDrugs();
-            const results = await searchDrugsEnhanced(text, 'all', allDrugs);
-            setResults(Array.isArray(results) ? results : []);
+            let results: any[] = [];
+            for (const word of keywords) {
+                const found = await searchDrugsEnhanced(word, 'all', allDrugs);
+                if (Array.isArray(found)) {
+                    results = results.concat(found);
+                }
+            }
+            // กำจัดซ้ำ
+            results = results.filter((v, i, a) => a.findIndex(t => t.ชื่อการค้า === v.ชื่อการค้า) === i);
+            setResults(results);
         } else {
             setResults([]);
         }
