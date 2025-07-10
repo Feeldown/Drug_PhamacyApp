@@ -40,7 +40,7 @@ const ScanPage = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<Tab>('camera');
     const [image, setImage] = useState<string | null>(null);
-    const [results, setResults] = useState<any[] | null>(null);
+    const [results, setResults] = useState<any[]>([]);
     const [processing, setProcessing] = useState(false);
     const [ocrText, setOcrText] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,7 +53,7 @@ const ScanPage = () => {
             const imgSrc = webcamRef.current.getScreenshot();
             if (imgSrc) {
                 setImage(imgSrc);
-                setResults(null);
+                setResults([]);
                 setProcessing(true);
             }
         }
@@ -66,7 +66,7 @@ const ScanPage = () => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImage(reader.result as string);
-                setResults(null);
+                setResults([]);
                 setProcessing(true);
             };
             reader.readAsDataURL(file);
