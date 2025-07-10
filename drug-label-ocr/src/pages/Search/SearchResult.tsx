@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { searchDrugsEnhanced, DrugData, getAllDrugs } from '../../api/drugData';
+import { searchDrugsSmart, DrugData, getAllDrugs } from '../../api/drugData';
 import './Search.css';
 
 const DrugCard = ({ drug, onClick }: { drug: DrugData, onClick: () => void }) => {
@@ -49,8 +49,8 @@ const SearchResult = () => {
                 setIsLoading(false);
                 return;
             }
-            // fallback: contains
-            const filtered = query.trim() ? await searchDrugsEnhanced(query, 'all', allDrugs) : [];
+            // fallback: ใช้ searchDrugsSmart (multi-keyword)
+            const filtered = query.trim() ? await searchDrugsSmart(query, allDrugs) : [];
             setResults(filtered);
             setIsLoading(false);
         };

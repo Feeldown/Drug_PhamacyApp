@@ -155,3 +155,31 @@ export const getSimilarDrugs = async (currentDrug: DrugData, limit: number = 5):
 export const getDrugsByFormAsync = async (form: string): Promise<DrugData[]> => {
   return getDrugsByForm(form);
 }; 
+
+// ค้นหายาแบบฉลาด: แยก keyword, ค้นหาทั้งชื่อสามัญ ชื่อการค้า และยานี้ใช้สำหรับ, เรียงตาม match count
+export const searchDrugsSmart = async (query: string, drugList?: DrugData[]): Promise<DrugData[]> => {
+  const all = drugList || await getAllDrugs();
+  const keywords = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  const scored = all.map(drug => {
+    const matchCount = keywords.reduce((acc, kw) => {
+      if (
+        drug.ชื่อสามัญ.toLowerCase().includes(kw) ||
+        drug.ชื่อการค้า.toLowerCase().includes(kw) ||
+        (drug['ยานี้ใช้สำหรับ'] && drug['ยานี้ใช้สำหรับ'].toLowerCase().includes(kw))
+      ) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
+    return { drug, matchCount };
+  });
+
+  return scored
+    .filter(item => item.matchCount > 0)
+    .sort((a, b) => b.matchCount - a.matchCount)
+    .map(item => item.drug);
+}; 
