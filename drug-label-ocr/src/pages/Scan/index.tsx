@@ -171,7 +171,8 @@ const ScanPage = () => {
             )}
 
             {/* แสดงผลลัพธ์ OCR (mock เฉพาะเมื่อมีข้อความจริง) */}
-            {Array.isArray(results) && (
+            {console.log('DEBUG results:', results)}
+            {Array.isArray(results) && results.length > 0 ? (
                 <div className="search-results">
                     <div className="results-header">
                         <h2 className="results-title">ผลการค้นหา</h2>
@@ -181,7 +182,14 @@ const ScanPage = () => {
                         <ResultCard key={index} drug={drug} />
                     ))}
                 </div>
-            )}
+            ) : Array.isArray(results) && results.length === 0 ? (
+                <div className="search-results">
+                    <div className="results-header">
+                        <h2 className="results-title">ผลการค้นหา</h2>
+                        <span className="results-count">ไม่พบผลลัพธ์</span>
+                    </div>
+                </div>
+            ) : null}
 
             {/* Bottom Navigation */}
             <nav className="bottom-nav">
