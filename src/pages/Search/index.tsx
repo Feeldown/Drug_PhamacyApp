@@ -18,8 +18,8 @@ const DrugCard = ({ drug, onClick }: { drug: DrugData, onClick: () => void }) =>
         <div className="drug-card" onClick={onClick}>
             <div className="drug-card-image">{getDrugIcon(drug.รูปแบบยา)}</div>
             <div className="drug-card-info">
-                <h3 className="drug-card-title">{drug.ชื่อสามัญ}</h3>
-                <p className="drug-card-subtitle">{drug.ชื่อการค้า}</p>
+                <h3 className="drug-card-title">{drug.ชื่อการค้า}</h3>
+                <p className="drug-card-subtitle">{drug.ชื่อสามัญ}</p>
                 <div className="drug-card-uses">
                     {drug['ยานี้ใช้สำหรับ'].split('\n')[0].replace('* ', '')}
                 </div>

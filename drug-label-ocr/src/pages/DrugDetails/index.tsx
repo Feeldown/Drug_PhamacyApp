@@ -41,7 +41,7 @@ const DrugCard = ({ drug, onClick }: { drug: DrugData, onClick: () => void }) =>
         <div className="drug-card" onClick={onClick}>
             <div className="drug-card-image">{drugIcon}</div>
             <div className="drug-card-info">
-                <h4>{drug.ชื่อการค้า}</h4>
+                <h4>{drug.ชื่อสามัญ}</h4>
                 {/* <p>{drug.ชื่อสามัญ}</p> */}
                 <span className="drug-card-form">{drug.รูปแบบยา}</span>
             </div>
@@ -120,8 +120,8 @@ const DrugDetailsPage = () => {
         <div className="drug-details-page">
             <header className="header">
                 <button onClick={() => navigate(-1)} className="back-btn">←</button>
-                <h1 className="drug-title">{drug.ชื่อสามัญ}</h1>
-                {/* <p className="drug-subtitle">{drug.ชื่อการค้า}</p> */}
+                <h1 className="drug-title">{drug.ชื่อการค้า}</h1>
+                {/* <p className="drug-subtitle">{drug.ชื่อสามัญ}</p> */}
             </header>
 
             <section className="drug-image-section">
@@ -134,7 +134,7 @@ const DrugDetailsPage = () => {
                     <InfoCard
                         title="ข้อมูลทั่วไป"
                         icon="💊"
-                        content={[`ชื่อสามัญ: ${drug.ชื่อสามัญ}`, `ชื่อการค้า: ${drug.ชื่อการค้า}`, `รูปแบบยา: ${drug.รูปแบบยา}`]}
+                        content={[`ชื่อสามัญ: ${drug.ชื่อการค้า}`, `ชื่อการค้า: ${drug.ชื่อสามัญ}`, `รูปแบบยา: ${drug.รูปแบบยา}`]}
                     />
                 </section>
 
