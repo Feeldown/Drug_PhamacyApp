@@ -16,23 +16,27 @@ const navItems = [
 // We will need a ResultCard component, let's assume it exists in a shared directory
 // import ResultCard from '../shared/ResultCard'; 
 // For now, let's define a placeholder so the code runs.
-const ResultCard = ({ drug }: { drug: any }) => (
+const ResultCard = ({ drug }: { drug: any }) => {
+  console.log('DEBUG ResultCard drug:', drug);
+  if (!drug || typeof drug !== 'object') return null;
+  return (
     <div className="result-card">
-        <div className="result-header">
-            <div className="result-image-placeholder">💊</div>
-            <div className="result-info">
-                <h3 className="result-title">{drug.name}</h3>
-                <div className="result-tags">
-                    <span className="result-tag">ยาเม็ด</span>
-                </div>
-                <div className="result-match">
-                    <span>✓</span>
-                    <span>ตรงกัน {drug.match}%</span>
-                </div>
-            </div>
+      <div className="result-header">
+        <div className="result-image-placeholder">💊</div>
+        <div className="result-info">
+          <h3 className="result-title">{drug.name}</h3>
+          <div className="result-tags">
+            <span className="result-tag">ยาเม็ด</span>
+          </div>
+          <div className="result-match">
+            <span>✓</span>
+            <span>ตรงกัน {drug.match}%</span>
+          </div>
         </div>
+      </div>
     </div>
-);
+  );
+};
 
 type Tab = 'camera' | 'upload';
 
