@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createWorker } from 'tesseract.js';
+import * as Tesseract from 'tesseract.js';
 import { Box, CircularProgress, Typography, Paper } from '@mui/material';
 
 interface OCRProcessorProps {
@@ -15,14 +15,16 @@ const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
     let isMounted = true;
 
     const doOCR = async () => {
-      // Create worker with logger
-      const worker = await createWorker({
+      // Create worker with Logger and LangPath
+      const worker = await Tesseract.createWorker({
+        // @ts-ignore
         logger: (p: { status: string; progress: number }) => {
           if (isMounted && p.status === 'recognizing text') {
             setProgress(p.progress * 100);
           }
-        }
-      });
+        },
+        langPath: '/tessdata'
+      }) as any;
       
       try {
         // Initialize worker
