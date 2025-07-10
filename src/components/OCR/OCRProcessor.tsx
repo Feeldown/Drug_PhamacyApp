@@ -7,14 +7,6 @@ interface OCRProcessorProps {
   onResult: (text: string) => void;
 }
 
-interface TesseractWorker {
-  loadLanguage: (lang: string) => Promise<void>;
-  initialize: (lang: string) => Promise<void>;
-  setProgressHandler: (handler: (progress: { status: string; progress: number }) => void) => void;
-  recognize: (image: string) => Promise<{ data: { text: string } }>;
-  terminate: () => Promise<void>;
-}
-
 const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string>('');
@@ -23,17 +15,16 @@ const OCRProcessor: React.FC<OCRProcessorProps> = ({ imageSrc, onResult }) => {
     let isMounted = true;
 
     const doOCR = async () => {
-      // Create worker with type assertion
-      const worker = (await createWorker()) as unknown as TesseractWorker;
-      
-      try {
-        // Set progress handler
-        worker.setProgressHandler((p) => {
+      // Create worker with logger
+      const worker = await createWorker({
+        logger: (p: { status: string; progress: number }) => {
           if (isMounted && p.status === 'recognizing text') {
             setProgress(p.progress * 100);
           }
-        });
-
+        }
+      });
+      
+      try {
         // Initialize worker
         await worker.loadLanguage('eng+tha');
         await worker.initialize('eng+tha');
