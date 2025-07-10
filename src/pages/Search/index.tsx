@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { searchDrugsEnhanced, getAllDrugs, DrugData, getUniqueDrugForms, DrugForm } from '../../api/drugData';
 import './Search.css';
@@ -18,8 +18,8 @@ const DrugCard = ({ drug, onClick }: { drug: DrugData, onClick: () => void }) =>
         <div className="drug-card" onClick={onClick}>
             <div className="drug-card-image">{getDrugIcon(drug.รูปแบบยา)}</div>
             <div className="drug-card-info">
-                <h3 className="drug-card-title">{drug.ชื่อการค้า}</h3>
-                <p className="drug-card-subtitle">{drug.ชื่อสามัญ}</p>
+                <h3 className="drug-card-title">{drug.ชื่อสามัญ}</h3>
+                <p className="drug-card-subtitle">{drug.ชื่อการค้า}</p>
                 <div className="drug-card-uses">
                     {drug['ยานี้ใช้สำหรับ'].split('\n')[0].replace('* ', '')}
                 </div>
@@ -36,6 +36,7 @@ const SearchPage = () => {
     const [activeFilter, setActiveFilter] = useState('ทั้งหมด');
     const [isLoading, setIsLoading] = useState(true);
     const [searchType, setSearchType] = useState<'all' | 'generic' | 'brand'>('all');
+    const [filteredResults, setFilteredResults] = useState<DrugData[]>([]);
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -54,18 +55,24 @@ const SearchPage = () => {
         fetchInitialData();
     }, []);
 
-    const filteredResults = useMemo(() => {
+    useEffect(() => {
         let base = allDrugs;
         if (activeFilter !== 'ทั้งหมด') {
             const normalizedFilter = activeFilter.trim().toLowerCase();
             base = allDrugs.filter(drug => drug.รูปแบบยา.trim().toLowerCase() === normalizedFilter);
         }
-        if (query.trim() !== '') {
-            base = searchDrugsEnhanced(query, searchType, base);
-        }
-        const sorted = [...base].sort((a, b) => a.ชื่อการค้า.localeCompare(b.ชื่อการค้า));
-        console.log('filteredResults FINAL:', sorted.map(d => d.ชื่อการค้า + ' | ' + d.รูปแบบยา));
-        return sorted;
+
+        const doSearch = async () => {
+            let result = base;
+            if (query.trim() !== '') {
+                result = await searchDrugsEnhanced(query, searchType, base);
+            }
+            const sorted = [...result].sort((a, b) => a.ชื่อการค้า.localeCompare(b.ชื่อการค้า));
+            console.log('filteredResults FINAL:', sorted.map(d => d.ชื่อการค้า + ' | ' + d.รูปแบบยา));
+            setFilteredResults(sorted);
+        };
+
+        doSearch();
     }, [allDrugs, query, searchType, activeFilter]);
 
     useEffect(() => {

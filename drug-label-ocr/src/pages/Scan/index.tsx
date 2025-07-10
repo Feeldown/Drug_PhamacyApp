@@ -16,21 +16,21 @@ const navItems = [
 // We will need a ResultCard component, let's assume it exists in a shared directory
 // import ResultCard from '../shared/ResultCard'; 
 // For now, let's define a placeholder so the code runs.
+// ปรับ ResultCard ให้แสดงชื่อยาสามัญ (generic name) เป็นหัวข้อหลัก
 const ResultCard = ({ drug }: { drug: any }) => {
-  console.log('DEBUG ResultCard drug:', drug);
   if (!drug || typeof drug !== 'object') return null;
   return (
     <div className="result-card">
       <div className="result-header">
         <div className="result-image-placeholder">💊</div>
         <div className="result-info">
-          <h3 className="result-title">{drug.name}</h3>
+          <h3 className="result-title">{drug.ชื่อสามัญ || drug.genericName || '-'}</h3>
           <div className="result-tags">
-            <span className="result-tag">ยาเม็ด</span>
+            <span className="result-tag">{drug.ชื่อการค้า || drug.tradeName || ''}</span>
           </div>
           <div className="result-match">
             <span>✓</span>
-            <span>ตรงกัน {drug.match}%</span>
+            {drug.match && <span>ตรงกัน {drug.match}%</span>}
           </div>
         </div>
       </div>
