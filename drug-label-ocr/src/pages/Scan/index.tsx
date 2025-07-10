@@ -173,7 +173,7 @@ const ScanPage = () => {
             )}
 
             {/* แสดงผลลัพธ์ OCR (mock เฉพาะเมื่อมีข้อความจริง) */}
-            {results && !processing && (
+            {Array.isArray(results) && (
                 <div className="search-results">
                     <div className="results-header">
                         <h2 className="results-title">ผลการค้นหา</h2>
